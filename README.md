@@ -1,6 +1,6 @@
 # aamarpay
 
-[aamarPay](https://aamarpay.com/) Payment Gateway Flutter Package.
+[aamarPay](https://aamarpay.com/) is an online payment gateway service for Bangladesh. Committed to provide best payment experience online for business. Lowest fee and fast checkout will give you good experience of receiving payment online.
 
 ![aamarpay](https://i.imgur.com/lAiUw6j.png)
 
@@ -56,7 +56,7 @@ class _MyPayState extends State<MyPay> {
             cancelUrl: "example.com/payment/cancel",
             successUrl: "example.com/payment/confirm",
             failUrl: "example.com/payment/fail",
-            customerEmail: "masum@test.com",
+            customerEmail: "masumbillahsanjid@gmail.com",
             customerMobile: "01834760591",
             customerName: "Masum Billah Sanjid",
             signature: "dbb74894e82415a2f7ff0ec3a97e4183",
@@ -88,21 +88,21 @@ class _MyPayState extends State<MyPay> {
 ```
 - Remember that you will have to change the sandbox transaction ID again and again. If you don't do this , it will show error.
 
-Check Payment Status
+## Check Payment Status
 
 ```
  paymentStatus: (Paymentstatus) {
               print(Paymentstatus);
             },
 ```
-Read return url
+## Read return url
 
 ```
  returnUrl: (url) {
               print(url);
             },
 ```
-Read button press event
+## Read button press event
 ```
 isLoading: (v) {
               setState(() {
