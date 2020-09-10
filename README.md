@@ -2,15 +2,17 @@
 
 [aamarPay](https://aamarpay.com/) Payment Gateway Flutter Package.
 
+![aamarpay](https://i.imgur.com/lAiUw6j.png)
+
 ## Requirements 
 
 - Android: `minSdkVersion 17` 
-
+- Remember that you will have to change the sandbox transaction ID again and again. If you don't do this , it will show error.
 ## How to use: 
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     sslcommerz: ^0.0.1
+     aamarpay: ^0.0.2
 ```
 install packages from the command line:
 

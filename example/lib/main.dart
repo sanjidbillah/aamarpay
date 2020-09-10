@@ -37,12 +37,12 @@ class _MyPayState extends State<MyPay> {
             customerEmail: "masum@test.com",
             customerMobile: "01834760591",
             customerName: "Masum Billah Sanjid",
-            signature: "",
-            storeID: "",
+            signature: "dbb74894e82415a2f7ff0ec3a97e4183",
+            storeID: "aamarpaytest",
             transactionAmount: "100",
-            transactionID: "sfasg",
+            transactionID: "asavs",
             description: "asgsg",
-            url: "",
+            url: "https://sandbox.aamarpay.com",
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(),

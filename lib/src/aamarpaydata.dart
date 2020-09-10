@@ -29,28 +29,27 @@ class aamarpayData<T> extends StatefulWidget {
   String customerPostCode;
   Widget child;
 
-  aamarpayData(
-      {@required this.url,
-      @required this.successUrl,
-      @required this.failUrl,
-      @required this.cancelUrl,
-      @required this.storeID,
-      @required this.transactionID,
-      @required this.transactionAmount,
-      @required this.signature,
-      this.description,
-      @required this.customerName,
-      @required this.customerEmail,
-      @required this.customerMobile,
-      this.paymentStatus,
-      this.isLoading,
-      this.child,
-      this.returnUrl,
-      this.customerAddress1,
-      this.customerAddress2,
-      this.customerCity,
-      this.customerState,
-      this.customerPostCode});
+  aamarpayData({@required this.url,
+    @required this.successUrl,
+    @required this.failUrl,
+    @required this.cancelUrl,
+    @required this.storeID,
+    @required this.transactionID,
+    @required this.transactionAmount,
+    @required this.signature,
+    this.description,
+    @required this.customerName,
+    @required this.customerEmail,
+    @required this.customerMobile,
+    this.paymentStatus,
+    this.isLoading,
+    this.child,
+    this.returnUrl,
+    this.customerAddress1,
+    this.customerAddress2,
+    this.customerCity,
+    this.customerState,
+    this.customerPostCode});
 
   @override
   _aamarpayDataState<T> createState() => _aamarpayDataState<T>();
@@ -95,7 +94,7 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
 
               Future.delayed(Duration(milliseconds: 200), () async {
                 Route route =
-                    MaterialPageRoute(builder: (context) => webView(url));
+                MaterialPageRoute(builder: (context) => webView(url));
                 Navigator.push(context, route).then((value) {
                   if (value.split('/').contains("confirm")) {
                     urlHandler(value);
@@ -135,23 +134,26 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
       "amount": widget.transactionAmount.toString(),
       "currency": "BDT",
       "signature_key": widget.signature,
-      "desc": widget.description,
+      "desc": widget.description==null?"Nothing":widget.description,
       "cus_name": widget.customerName,
       "cus_email": widget.customerEmail,
       "cus_add1":
-          widget.customerAddress1.isEmpty ? "Dhaka" : widget.customerAddress1,
+      widget.customerAddress1 == null ? "Dhaka" : widget.customerAddress1,
       "cus_add2":
-          widget.customerAddress2.isEmpty ? "Dhaka" : widget.customerAddress2,
-      "cus_city": widget.customerCity.isEmpty ? "Dhaka" : widget.customerCity,
+      widget.customerAddress2 == null ? "Dhaka" : widget.customerAddress2,
+      "cus_city": widget.customerCity == null ? "Dhaka" : widget.customerCity,
       "cus_state":
-          widget.customerState.isEmpty ? "Dhaka" : widget.customerState,
+      widget.customerState == null ? "Dhaka" : widget.customerState,
       "cus_postcode":
-          widget.customerPostCode.isEmpty ? "1206" : widget.customerPostCode.toString(),
+      widget.customerPostCode == null ? "1206" : widget.customerPostCode
+          .toString(),
       "cus_country": "Bangladesh",
       "cus_phone": widget.customerMobile.toString(),
     });
     if (response.statusCode == 200) {
       String mydata = response.body;
+
+     
       var start = 'action="';
       var end = "\">";
       final startIndex = mydata.indexOf(start);
