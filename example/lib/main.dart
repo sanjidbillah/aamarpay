@@ -34,7 +34,7 @@ class _MyPayState extends State<MyPay> {
             cancelUrl: "example.com/payment/cancel",
             successUrl: "example.com/payment/confirm",
             failUrl: "example.com/payment/fail",
-            customerEmail: "masum@test.com",
+            customerEmail: "masumbillahsanjid@gmail.com",
             customerMobile: "01834760591",
             customerName: "Masum Billah Sanjid",
             signature: "dbb74894e82415a2f7ff0ec3a97e4183",
