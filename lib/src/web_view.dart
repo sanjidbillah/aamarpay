@@ -2,16 +2,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class webView extends StatefulWidget {
-  var Url;
+class MyView extends StatefulWidget {
+  final url;
 
-  webView(this.Url);
+  MyView(this.url);
 
   @override
-  _webViewState createState() => _webViewState();
+  _MyViewState createState() => _MyViewState();
 }
 
-class _webViewState extends State<webView> {
+class _MyViewState extends State<MyView> {
   var isloading = true;
   final Completer<InAppWebViewController> _completer =
       Completer<InAppWebViewController>();
@@ -51,7 +51,7 @@ class _webViewState extends State<webView> {
                   _isLoadingPage = false;
                 });
               },
-              initialUrl: '${widget.Url}',
+              initialUrl: '${widget.url}',
             ),
             _isLoadingPage
                 ? Center(child: CircularProgressIndicator())

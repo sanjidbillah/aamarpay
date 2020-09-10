@@ -1,6 +1,6 @@
 name: aamarpay
-description: aamarPay Flutter Payment Gateway package.
-version: 0.0.2
+description: aamarPay is an online payment gateway service for Bangladesh. Committed to provide best payment experience online for business. Lowest fee and fast checkout will give you good experience of receiving payment online.
+version: 0.0.3
 homepage: https://github.com/sanjidbillah/aamarpay
 
 environment:

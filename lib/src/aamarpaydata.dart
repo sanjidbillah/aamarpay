@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'webView.dart';
+import 'web_view.dart';
 
 typedef PaymentStatus<T> = void Function(T value);
 typedef isLoadingStaus<T> = void Function(T value);
 typedef readUrl<T> = void Function(T value);
 
-class aamarpayData<T> extends StatefulWidget {
-  String url;
+class AamarpayData<T> extends StatefulWidget {
+  final  url;
   final successUrl;
   final failUrl;
   final cancelUrl;
@@ -19,17 +19,17 @@ class aamarpayData<T> extends StatefulWidget {
   final customerName;
   final customerEmail;
   final customerMobile;
-  PaymentStatus<String> paymentStatus;
-  isLoadingStaus<bool> isLoading;
-  readUrl<dynamic> returnUrl;
-  String customerAddress1;
-  String customerAddress2;
-  String customerCity;
-  String customerState;
-  String customerPostCode;
-  Widget child;
+  final PaymentStatus<String> paymentStatus;
+  final isLoadingStaus<bool> isLoading;
+  final readUrl<dynamic> returnUrl;
+  final customerAddress1;
+  final customerAddress2;
+  final customerCity;
+  final customerState;
+  final customerPostCode;
+  final Widget child;
 
-  aamarpayData({@required this.url,
+  AamarpayData({@required this.url,
     @required this.successUrl,
     @required this.failUrl,
     @required this.cancelUrl,
@@ -52,10 +52,10 @@ class aamarpayData<T> extends StatefulWidget {
     this.customerPostCode});
 
   @override
-  _aamarpayDataState<T> createState() => _aamarpayDataState<T>();
+  _AamarpayDataState<T> createState() => _AamarpayDataState<T>();
 }
 
-class _aamarpayDataState<T> extends State<aamarpayData<T>> {
+class _AamarpayDataState<T> extends State<AamarpayData<T>> {
   @override
   void dispose() {
     super.dispose();
@@ -94,7 +94,7 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
 
               Future.delayed(Duration(milliseconds: 200), () async {
                 Route route =
-                MaterialPageRoute(builder: (context) => webView(url));
+                MaterialPageRoute(builder: (context) => MyView(url));
                 Navigator.push(context, route).then((value) {
                   if (value.split('/').contains("confirm")) {
                     urlHandler(value);

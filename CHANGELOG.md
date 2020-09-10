@@ -1,3 +1,8 @@
+## [0.0.3]
+
+* Documentation
+
+
 ## [0.0.2]
 
 * Add payment status

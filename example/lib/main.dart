@@ -19,7 +19,7 @@ class _MyPayState extends State<MyPay> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: aamarpayData(
+        child: AamarpayData(
             returnUrl: (url) {
               print(url);
             },
@@ -40,7 +40,7 @@ class _MyPayState extends State<MyPay> {
             signature: "dbb74894e82415a2f7ff0ec3a97e4183",
             storeID: "aamarpaytest",
             transactionAmount: "100",
-            transactionID: "asavs",
+            transactionID: "doflutter",
             description: "asgsg",
             url: "https://sandbox.aamarpay.com",
             child: isLoading

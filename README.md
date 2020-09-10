@@ -7,12 +7,11 @@
 ## Requirements 
 
 - Android: `minSdkVersion 17` 
-- Remember that you will have to change the sandbox transaction ID again and again. If you don't do this , it will show error.
 ## How to use: 
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^0.0.2
+     aamarpay: ^0.0.3
 ```
 install packages from the command line:
 
@@ -20,15 +19,6 @@ install packages from the command line:
 $ flutter pub get
 ```
 Now in your Dart code, you can use:
-```
-import 'package:aamarpay/aamarpay.dart';
-
-class MyPay extends StatefulWidget {
-  @override
-  _MyPayState createState() => _MyPayState();
-}
-```
-Here is Full Example Code
 ```
 import 'package:flutter/material.dart';
 import 'package:aamarpay/aamarpay.dart';
@@ -51,7 +41,7 @@ class _MyPayState extends State<MyPay> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: aamarpayData(
+        child: AamarpayData(
             returnUrl: (url) {
               print(url);
             },
@@ -69,12 +59,12 @@ class _MyPayState extends State<MyPay> {
             customerEmail: "masum@test.com",
             customerMobile: "01834760591",
             customerName: "Masum Billah Sanjid",
-            signature: "",
-            storeID: "",
+            signature: "dbb74894e82415a2f7ff0ec3a97e4183",
+            storeID: "aamarpaytest",
             transactionAmount: "100",
-            transactionID: "sfasg",
+            transactionID: "doflutter",
             description: "asgsg",
-            url: "",
+            url: "https://sandbox.aamarpay.com",
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -96,6 +86,7 @@ class _MyPayState extends State<MyPay> {
 
 
 ```
+- Remember that you will have to change the sandbox transaction ID again and again. If you don't do this , it will show error.
 
 Check Payment Status
 
