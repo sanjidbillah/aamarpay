@@ -1,7 +1,7 @@
 name: aamarpay
-description: aamarPay Payment Gateway package.
-version: 0.0.1
-homepage: https://aamarpay.com/
+description: aamarPay Flutter Payment Gateway package.
+version: 0.0.2
+homepage: https://github.com/sanjidbillah/aamarpay
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

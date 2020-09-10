@@ -7,7 +7,6 @@ typedef isLoadingStaus<T> = void Function(T value);
 typedef readUrl<T> = void Function(T value);
 
 class aamarpayData<T> extends StatefulWidget {
-
   String url;
   final successUrl;
   final failUrl;
@@ -23,27 +22,35 @@ class aamarpayData<T> extends StatefulWidget {
   PaymentStatus<String> paymentStatus;
   isLoadingStaus<bool> isLoading;
   readUrl<dynamic> returnUrl;
+  String customerAddress1;
+  String customerAddress2;
+  String customerCity;
+  String customerState;
+  String customerPostCode;
   Widget child;
 
-  aamarpayData({
-    @required this.url,
-    @required this.successUrl,
-    @required this.failUrl,
-    @required this.cancelUrl,
-    @required this.storeID,
-    @required this.transactionID,
-    @required this.transactionAmount,
-    @required this.signature,
-    this.description,
-    @required this.customerName,
-    @required this.customerEmail,
-    @required this.customerMobile,
-    this.paymentStatus,
-    this.isLoading,
-    this.child,
-    this.returnUrl
-  });
-
+  aamarpayData(
+      {@required this.url,
+      @required this.successUrl,
+      @required this.failUrl,
+      @required this.cancelUrl,
+      @required this.storeID,
+      @required this.transactionID,
+      @required this.transactionAmount,
+      @required this.signature,
+      this.description,
+      @required this.customerName,
+      @required this.customerEmail,
+      @required this.customerMobile,
+      this.paymentStatus,
+      this.isLoading,
+      this.child,
+      this.returnUrl,
+      this.customerAddress1,
+      this.customerAddress2,
+      this.customerCity,
+      this.customerState,
+      this.customerPostCode});
 
   @override
   _aamarpayDataState<T> createState() => _aamarpayDataState<T>();
@@ -79,7 +86,6 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: 80),
-
         GestureDetector(
           child: widget.child,
           onTap: () {
@@ -88,8 +94,8 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
               var url = "${widget.url}${value}";
 
               Future.delayed(Duration(milliseconds: 200), () async {
-                Route route = MaterialPageRoute(
-                    builder: (context) => webView(url));
+                Route route =
+                    MaterialPageRoute(builder: (context) => webView(url));
                 Navigator.push(context, route).then((value) {
                   if (value.split('/').contains("confirm")) {
                     urlHandler(value);
@@ -115,30 +121,34 @@ class _aamarpayDataState<T> extends State<aamarpayData<T>> {
             });
           },
         )
-
-      ],);
+      ],
+    );
   }
 
   Future getPayment() async {
     http.Response response = await http.post("${widget.url}/index.php", body: {
-      "store_id": widget.storeID,
-      "tran_id": widget.transactionID,
+      "store_id": widget.storeID.toString(),
+      "tran_id": widget.transactionID.toString(),
       "success_url": widget.successUrl,
       "fail_url": widget.failUrl,
       "cancel_url": widget.cancelUrl,
-      "amount": widget.transactionAmount,
+      "amount": widget.transactionAmount.toString(),
       "currency": "BDT",
       "signature_key": widget.signature,
       "desc": widget.description,
       "cus_name": widget.customerName,
       "cus_email": widget.customerEmail,
-      "cus_add1": "Dhaka",
-      "cus_add2": "Dhaka",
-      "cus_city": "Dhaka",
-      "cus_state": "Dhaka",
-      "cus_postcode": "1206",
+      "cus_add1":
+          widget.customerAddress1.isEmpty ? "Dhaka" : widget.customerAddress1,
+      "cus_add2":
+          widget.customerAddress2.isEmpty ? "Dhaka" : widget.customerAddress2,
+      "cus_city": widget.customerCity.isEmpty ? "Dhaka" : widget.customerCity,
+      "cus_state":
+          widget.customerState.isEmpty ? "Dhaka" : widget.customerState,
+      "cus_postcode":
+          widget.customerPostCode.isEmpty ? "1206" : widget.customerPostCode.toString(),
       "cus_country": "Bangladesh",
-      "cus_phone": widget.customerMobile,
+      "cus_phone": widget.customerMobile.toString(),
     });
     if (response.statusCode == 200) {
       String mydata = response.body;
