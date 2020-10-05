@@ -11,7 +11,7 @@
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^0.0.5
+     aamarpay: ^0.0.6
 ```
 install packages from the command line:
 
@@ -89,7 +89,7 @@ class _MyPayState extends State<MyPay> {
 
 
 
-- Remember that you will have to change the sandbox transaction ID again and again. If you don't do this , it will show error.
+- Remember that transaction ID is Unique.
 
 
 
