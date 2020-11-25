@@ -82,11 +82,7 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
       }
     }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(height: 80),
-        GestureDetector(
+    return  InkWell(
           child: widget.child,
           onTap: () {
             loadingHandler(true);
@@ -120,9 +116,7 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
               });
             });
           },
-        )
-      ],
-    );
+        );
   }
 
   Future getPayment() async {

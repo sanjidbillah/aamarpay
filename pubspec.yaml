@@ -1,6 +1,6 @@
 name: aamarpay
 description: aamarPay is an online payment gateway service for Bangladesh.
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/sanjidbillah/aamarpay
 
 environment:
