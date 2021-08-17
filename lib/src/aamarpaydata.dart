@@ -82,45 +82,45 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
       }
     }
 
-    return  InkWell(
-          child: widget.child,
-          onTap: () {
-            loadingHandler(true);
-            getPayment().then((value) {
-              var url = "${widget.url}$value";
+    return InkWell(
+      child: widget.child,
+      onTap: () {
+        loadingHandler(true);
+        getPayment().then((value) {
+          var url = "${widget.url}$value";
 
-              Future.delayed(Duration(milliseconds: 200), () async {
-                Route route =
-                    MaterialPageRoute(builder: (context) => MyView(url));
-                Navigator.push(context, route).then((value) {
-                  if (value.split('/').contains("confirm")) {
-                    urlHandler(value);
-                    paymentHandler("success");
+          Future.delayed(Duration(milliseconds: 200), () async {
+            Route route = MaterialPageRoute(builder: (context) => MyView(url));
+            Navigator.push(context, route).then((value) {
+              if (value.split('/').contains("confirm")) {
+                urlHandler(value);
+                paymentHandler("success");
 
-                    loadingHandler(false);
-                  } else if (value.split('/').contains("cancel")) {
-                    urlHandler(value);
-                    paymentHandler("cancel");
+                loadingHandler(false);
+              } else if (value.split('/').contains("cancel")) {
+                urlHandler(value);
+                paymentHandler("cancel");
 
-                    loadingHandler(false);
-                  } else if (value.split("/").contains("fail")) {
-                    urlHandler(value);
-                    paymentHandler("fail");
-                    loadingHandler(false);
-                  } else {
-                    urlHandler(value);
-                    paymentHandler("fail");
-                    loadingHandler(false);
-                  }
-                });
-              });
+                loadingHandler(false);
+              } else if (value.split("/").contains("fail")) {
+                urlHandler(value);
+                paymentHandler("fail");
+                loadingHandler(false);
+              } else {
+                urlHandler(value);
+                paymentHandler("fail");
+                loadingHandler(false);
+              }
             });
-          },
-        );
+          });
+        });
+      },
+    );
   }
 
   Future getPayment() async {
-    http.Response response = await http.post("${widget.url}/index.php", body: {
+    http.Response response =
+        await http.post(Uri.parse("${widget.url}/index.php"), body: {
       "store_id": widget.storeID.toString(),
       "tran_id": widget.transactionID.toString(),
       "success_url": widget.successUrl,
@@ -152,6 +152,8 @@ class _AamarpayDataState<T> extends State<AamarpayData<T>> {
       var end = "\">";
       final startIndex = mydata.indexOf(start);
       final endIndex = mydata.indexOf(end, startIndex + start.length);
+      print(mydata);
+      // print(endIndex);
       mydata.substring(startIndex + start.length, endIndex);
 
       return mydata.substring(startIndex + start.length, endIndex);
