@@ -120,7 +120,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
 
   Future getPayment() async {
     try {
-      widget.status!(eventState.initial);
+      widget.status?.call(eventState.initial);
       http.Response response =
           await http.post(Uri.parse("${widget.url}/index.php"), body: {
         "store_id": widget.storeID.toString(),
@@ -142,8 +142,8 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "cus_country": "Bangladesh",
         "cus_phone": widget.customerMobile.toString(),
       });
+      print(response.body);
       if (response.statusCode == 200) {
-        widget.status!(eventState.success);
         String res = response.body;
 
         String start = 'action="';
@@ -151,13 +151,15 @@ class _AamarpayState<T> extends State<Aamarpay> {
         final startIndex = res.indexOf(start);
         final endIndex = res.indexOf(end, startIndex + start.length);
         res.substring(startIndex + start.length, endIndex);
+        widget.status?.call(eventState.success);
         return res.substring(startIndex + start.length, endIndex);
       } else {
-        widget.status!(eventState.error);
+        widget.status?.call(eventState.error);
         throw Exception();
       }
     } catch (e) {
-      widget.status!(eventState.error);
+      
+      widget.status?.call(eventState.error);
       throw e;
     }
   }
