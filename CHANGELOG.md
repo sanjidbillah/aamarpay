@@ -1,7 +1,8 @@
-## [0.0.8]
+## [0.0.9]
 
 * Null safety
-* widget name renamded to Aamarpay
+* Widget name renamded to Aamarpay
+* Removed url and added isSandbox
 
 
 ## [0.0.8]

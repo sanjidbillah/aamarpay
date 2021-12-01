@@ -22,6 +22,8 @@ class _AAWebViewState extends State<AAWebView> {
     _isLoadingPage = true;
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

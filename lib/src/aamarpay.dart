@@ -10,31 +10,31 @@ typedef ReadUrl<T> = void Function(T value);
 typedef Status<T> = void Function(T value);
 
 class Aamarpay extends StatefulWidget {
-  final url;
-  final successUrl;
-  final failUrl;
-  final cancelUrl;
-  final storeID;
-  final transactionID;
-  final transactionAmount;
-  final signature;
-  final description;
-  final customerName;
-  final customerEmail;
-  final customerMobile;
+  final bool isSandBox;
+  final String successUrl;
+  final String failUrl;
+  final String cancelUrl;
+  final String storeID;
+  final String transactionID;
+  final String transactionAmount;
+  final String signature;
+  final String? description;
+  final String? customerName;
+  final String? customerEmail;
+  final String customerMobile;
   final PaymentStatus<String>? paymentStatus;
   final IsLoadingStaus<bool>? isLoading;
-  final ReadUrl<dynamic>? returnUrl;
+  final ReadUrl<String>? returnUrl;
   final Status<eventState>? status;
-  final customerAddress1;
-  final customerAddress2;
-  final customerCity;
-  final customerState;
-  final customerPostCode;
+  final String? customerAddress1;
+  final String? customerAddress2;
+  final String? customerCity;
+  final String? customerState;
+  final String? customerPostCode;
   final Widget child;
 
   Aamarpay(
-      {required this.url,
+      {required this.isSandBox,
       required this.successUrl,
       required this.failUrl,
       required this.cancelUrl,
@@ -62,31 +62,29 @@ class Aamarpay extends StatefulWidget {
 }
 
 class _AamarpayState<T> extends State<Aamarpay> {
-  @override
-  void dispose() {
-    super.dispose();
+  void paymentHandler(String value) {
+    widget.paymentStatus?.call(value);
   }
+
+  void loadingHandler(bool value) {
+    widget.isLoading?.call(value);
+  }
+
+  void urlHandler(String value) {
+    widget.returnUrl?.call(value);
+  }
+
+  String _sandBoxUrl = 'https://sandbox.aamarpay.com';
+  String _productionUrl = 'https://secure.aamarpay.com';
 
   @override
   Widget build(BuildContext context) {
-    void paymentHandler(String value) {
-      widget.paymentStatus?.call(value);
-    }
-
-    void loadingHandler(bool value) {
-      widget.isLoading?.call(value);
-    }
-
-    void urlHandler(String value) {
-      widget.returnUrl?.call(value);
-    }
-
     return InkWell(
       child: widget.child,
       onTap: () {
         loadingHandler(true);
-        getPayment().then((value) {
-          String url = "${widget.url}$value";
+        _getPayment().then((value) {
+          String url = "${widget.isSandBox?_sandBoxUrl:_productionUrl}$value";
 
           Future.delayed(Duration(milliseconds: 200), () async {
             Route route =
@@ -118,11 +116,11 @@ class _AamarpayState<T> extends State<Aamarpay> {
     );
   }
 
-  Future getPayment() async {
+  Future _getPayment() async {
     try {
       widget.status?.call(eventState.initial);
       http.Response response =
-          await http.post(Uri.parse("${widget.url}/index.php"), body: {
+          await http.post(Uri.parse("${widget.isSandBox?_sandBoxUrl:_productionUrl}/index.php"), body: {
         "store_id": widget.storeID.toString(),
         "tran_id": widget.transactionID.toString(),
         "success_url": widget.successUrl,
@@ -132,8 +130,8 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "currency": "BDT",
         "signature_key": widget.signature,
         "desc": widget.description ?? 'Empty',
-        "cus_name": widget.customerName,
-        "cus_email": widget.customerEmail,
+        "cus_name": widget.customerName ?? 'Customer name',
+        "cus_email": widget.customerEmail ?? 'nomail@mail.com',
         "cus_add1": widget.customerAddress1 ?? 'Dhaka',
         "cus_add2": widget.customerAddress2 ?? 'Dhaka',
         "cus_city": widget.customerCity ?? 'Dhaka',
@@ -158,7 +156,6 @@ class _AamarpayState<T> extends State<Aamarpay> {
         throw Exception();
       }
     } catch (e) {
-      
       widget.status?.call(eventState.error);
       throw e;
     }

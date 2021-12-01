@@ -53,7 +53,7 @@ class _MyPayState extends State<MyPay> {
             paymentStatus: (status) {
               print(status);
             },
-            status: (eventState event) {
+           status: (eventState event) {
               if (event == eventState.error) {
                 setState(() {
                   isLoading = false;
@@ -69,9 +69,9 @@ class _MyPayState extends State<MyPay> {
             signature: "dbb74894e82415a2f7ff0ec3a97e4183",
             storeID: "aamarpaytest",
             transactionAmount: "100",
-            transactionID: "doflutter",
-            description: "asgsg",
-            url: "https://sandbox.aamarpay.com",
+            transactionID: "transactionID",
+            description: "test",
+            isSandBox: true,
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
