@@ -11,7 +11,7 @@
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^0.0.8
+     aamarpay: ^0.0.9
 ```
 install packages from the command line:
 
@@ -41,7 +41,7 @@ class _MyPayState extends State<MyPay> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: AamarpayData(
+        child: Aamarpay(
             returnUrl: (url) {
               print(url);
             },
@@ -52,6 +52,13 @@ class _MyPayState extends State<MyPay> {
             },
             paymentStatus: (status) {
               print(status);
+            },
+            status: (eventState event) {
+              if (event == eventState.error) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
             },
             cancelUrl: "example.com/payment/cancel",
             successUrl: "example.com/payment/confirm",

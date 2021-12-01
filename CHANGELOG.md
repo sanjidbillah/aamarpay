@@ -1,5 +1,11 @@
 ## [0.0.8]
 
+* Null safety
+* widget name renamded to Aamarpay
+
+
+## [0.0.8]
+
 * Dependency upgrade
 
 ## [0.0.7]

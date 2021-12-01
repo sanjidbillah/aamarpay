@@ -19,7 +19,7 @@ class _MyPayState extends State<MyPay> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: AamarpayData(
+        child: Aamarpay(
             returnUrl: (url) {
               print(url);
             },
@@ -31,6 +31,13 @@ class _MyPayState extends State<MyPay> {
             paymentStatus: (status) {
               print(status);
             },
+            status: (eventState event) {
+              if (event == eventState.error) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
+            },
             cancelUrl: "example.com/payment/cancel",
             successUrl: "example.com/payment/confirm",
             failUrl: "example.com/payment/fail",
@@ -40,7 +47,7 @@ class _MyPayState extends State<MyPay> {
             signature: "dbb74894e82415a2f7ff0ec3a97e4183",
             storeID: "aamarpaytest",
             transactionAmount: "100",
-            transactionID: "aamarpaytrans",
+            transactionID: "sasssss",
             description: "test",
             url: "https://sandbox.aamarpay.com",
             child: isLoading

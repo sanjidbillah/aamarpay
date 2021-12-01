@@ -1,3 +1,3 @@
 library aamarpay;
 
-export 'src/aamarpaydata.dart';
+export 'src/aamarpay.dart';
