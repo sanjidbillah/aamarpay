@@ -157,9 +157,9 @@ class _AamarpayState<T> extends State<Aamarpay> {
           widget.onStatusEvent?.call(eventState.success);
           return url;
         } catch (e) {
-          String errorText = jsonDecode(response.body)['tran_id'] ??
-              jsonDecode(response.body)['amount'] ??
-              'Unknown error, please try again';
+          Map<String, dynamic> keyMap = jsonDecode(response.body);
+          String errorText =
+              keyMap.values.first ?? 'Unknown error, please try again';
           throw CustomException(errorText);
         }
       } else if (response.statusCode == 400) {
