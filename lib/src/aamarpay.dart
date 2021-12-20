@@ -91,29 +91,25 @@ class _AamarpayState<T> extends State<Aamarpay> {
           String url =
               "${widget.isSandBox ? _sandBoxUrl : _productionUrl}$value";
 
-          Future.delayed(Duration.zero, () async {
+          Future.delayed(Duration(milliseconds: 200), () async {
             if (value != null) {
-              Route route =
-                  MaterialPageRoute(builder: (context) => AAWebView(url));
+              loadingHandler(false);
+              Route route = MaterialPageRoute(
+                  builder: (context) =>
+                      AAWebView(url));
               Navigator.push(context, route).then((value) {
                 if (value.split('/').contains("confirm")) {
                   urlHandler(value);
                   paymentHandler("success");
-
-                  loadingHandler(false);
                 } else if (value.split('/').contains("cancel")) {
                   urlHandler(value);
                   paymentHandler("cancel");
-
-                  loadingHandler(false);
                 } else if (value.split("/").contains("fail")) {
                   urlHandler(value);
                   paymentHandler("fail");
-                  loadingHandler(false);
                 } else {
                   urlHandler(value);
                   paymentHandler("fail");
-                  loadingHandler(false);
                 }
               });
             }
