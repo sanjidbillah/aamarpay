@@ -94,9 +94,8 @@ class _AamarpayState<T> extends State<Aamarpay> {
           Future.delayed(Duration(milliseconds: 200), () async {
             if (value != null) {
               loadingHandler(false);
-              Route route = MaterialPageRoute(
-                  builder: (context) =>
-                      AAWebView(url));
+              Route route =
+                  MaterialPageRoute(builder: (context) => AAWebView(url));
               Navigator.push(context, route).then((value) {
                 if (value.split('/').contains("confirm")) {
                   urlHandler(value);
@@ -159,6 +158,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
           return url;
         } catch (e) {
           String errorText = jsonDecode(response.body)['tran_id'] ??
+              jsonDecode(response.body)['amount'] ??
               'Unknown error, please try again';
           throw CustomException(errorText);
         }
