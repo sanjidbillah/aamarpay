@@ -2,68 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:aamarpay/aamarpay.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: MyPay(),
-  ));
+  runApp(
+    const MaterialApp(
+      home: MyPay(),
+    ),
+  );
 }
 
 class MyPay extends StatefulWidget {
+  const MyPay({Key? key}) : super(key: key);
+
   @override
   _MyPayState createState() => _MyPayState();
 }
 
 class _MyPayState extends State<MyPay> {
-  bool isLoading = false;
+  bool onLoadingState = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Aamarpay(
-            returnUrl: (url) {
-              print(url);
-            },
-            isLoading: (v) {
+          onReturnUrl: (url) {
+            print(url);
+          },
+          onLoadingState: (v) {
+            setState(() {
+              onLoadingState = v;
+            });
+          },
+          onErrorMessage: (msg) {
+            print(msg);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(msg),
+              ),
+            );
+          },
+          onPaymentStatus: (status) {
+            print(status);
+          },
+          onStatusEvent: (eventState event) {
+            if (event == eventState.error) {
               setState(() {
-                isLoading = v;
+                onLoadingState = false;
               });
-            },
-            paymentStatus: (status) {
-              print(status);
-            },
-            status: (eventState event) {
-              if (event == eventState.error) {
-                setState(() {
-                  isLoading = false;
-                });
-              }
-            },
-            cancelUrl: "example.com/payment/cancel",
-            successUrl: "example.com/payment/confirm",
-            failUrl: "example.com/payment/fail",
-            customerEmail: "masumbillahsanjid@gmail.com",
-            customerMobile: "01834760591",
-            customerName: "Masum Billah Sanjid",
-            signature: "dbb74894e82415a2f7ff0ec3a97e4183",
-            storeID: "aamarpaytest",
-            transactionAmount: "100",
-            transactionID: "transactionID",
-            description: "test",
-            isSandBox: true,
-            child: isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(
-                    color: Colors.orange,
-                    height: 50,
-                    child: Center(
-                        child: Text(
+            }
+          },
+          cancelUrl: "example.com/payment/cancel",
+          successUrl: "example.com/payment/confirm",
+          failUrl: "example.com/payment/fail",
+          customerEmail: "masumbillahsanjid@gmail.com",
+          customerMobile: "01834760591",
+          customerName: "Masum Billah Sanjid",
+          signature: "dbb74894e82415a2f7ff0ec3a97e4183",
+          storeID: "aamarpaytest",
+          transactionAmount: "100",
+          transactionID: "hhffbbjjjyy",
+          description: "test",
+          isSandBox: true,
+          child: onLoadingState
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  color: Colors.orange,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
                       "Payment",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
-                    )),
-                  )),
+                    ),
+                  ),
+                ),
+        ),
       ),
     );
   }
