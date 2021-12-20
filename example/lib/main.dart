@@ -18,6 +18,9 @@ class MyPay extends StatefulWidget {
 
 class _MyPayState extends State<MyPay> {
   bool onLoadingState = false;
+  String amount = "";
+
+  final TextEditingController _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +61,49 @@ class _MyPayState extends State<MyPay> {
           customerName: "Masum Billah Sanjid",
           signature: "dbb74894e82415a2f7ff0ec3a97e4183",
           storeID: "aamarpaytest",
-          transactionAmount: "100",
-          transactionID: "transactionID",
+          transactionAmount: _amountController.text,
+          transactionID: "hhf88bjgjiiny",
           description: "test",
           isSandBox: true,
           child: onLoadingState
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Container(
-                  color: Colors.orange,
-                  height: 50,
-                  child: const Center(
-                    child: Text(
-                      "Payment",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: _amountController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.money),
+                        hintText: 'Amount',
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          amount = value;
+                        });
+                      },
                     ),
-                  ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      color: Colors.orange,
+                      height: 50,
+                      child: const Center(
+                        child: Text(
+                          "Payment",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ),

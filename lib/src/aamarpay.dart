@@ -158,8 +158,9 @@ class _AamarpayState<T> extends State<Aamarpay> {
           return url;
         } catch (e) {
           Map<String, dynamic> keyMap = jsonDecode(response.body);
-          String errorText =
-              keyMap.values.first ?? 'Unknown error, please try again';
+          String errorText = keyMap.isNotEmpty
+              ? keyMap.values.toList()[0]
+              : 'Unknown error, please try again';
           throw CustomException(errorText);
         }
       } else if (response.statusCode == 400) {
