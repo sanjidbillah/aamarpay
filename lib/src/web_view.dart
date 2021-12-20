@@ -56,7 +56,7 @@ class _AAWebViewState extends State<AAWebView> {
         child: Scaffold(
           body: Column(
             children: <Widget>[
-              pageProgress < 1.0
+              pageProgress < 1.0 && _isLoadingPage
                   ? LinearProgressIndicator(
                       value: pageProgress,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.green),

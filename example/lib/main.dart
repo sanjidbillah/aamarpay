@@ -29,22 +29,25 @@ class _MyPayState extends State<MyPay> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextFormField(
-              controller: _amountController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
-                icon: Icon(Icons.money),
-                hintText: 'Amount',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                border: OutlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextFormField(
+                controller: _amountController,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.money),
+                  hintText: 'Amount',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    amount = value;
+                  });
+                },
               ),
-              onChanged: (value) {
-                setState(() {
-                  amount = value;
-                });
-              },
             ),
             SizedBox(
               height: 10,
