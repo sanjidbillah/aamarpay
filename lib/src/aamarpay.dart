@@ -4,6 +4,7 @@ import 'web_view.dart';
 import 'dart:convert';
 
 enum eventState { initial, success, error }
+enum paymentStatus { SUCCESS, CANCEL, FAIL }
 typedef PaymentStatus<T> = void Function(T value);
 typedef IsLoadingStaus<T> = void Function(T value);
 typedef ReadUrl<T> = void Function(T value);
@@ -24,7 +25,7 @@ class Aamarpay extends StatefulWidget {
   final String? customerName;
   final String? customerEmail;
   final String customerMobile;
-  final PaymentStatus<String>? onPaymentStatus;
+  final PaymentStatus<paymentStatus>? onPaymentStatus;
   final IsLoadingStaus<bool>? onLoadingState;
   final ReadUrl<String>? onReturnUrl;
   final ReadError<String>? onErrorMessage;
@@ -32,6 +33,7 @@ class Aamarpay extends StatefulWidget {
   final String? customerAddress1;
   final String? customerAddress2;
   final String? customerCity;
+  final String? customerState;
   final String? customerState;
   final String? customerPostCode;
   final Widget child;
@@ -66,7 +68,7 @@ class Aamarpay extends StatefulWidget {
 }
 
 class _AamarpayState<T> extends State<Aamarpay> {
-  void paymentHandler(String value) {
+  void paymentHandler(paymentStatus value) {
     widget.onPaymentStatus?.call(value);
   }
 
@@ -97,18 +99,19 @@ class _AamarpayState<T> extends State<Aamarpay> {
               Route route =
                   MaterialPageRoute(builder: (context) => AAWebView(url));
               Navigator.push(context, route).then((value) {
-                if (value.split('/').contains("confirm")) {
+                if (value.split('/').contains("confirm") ||
+                    value.split('/').contains("success")) {
                   urlHandler(value);
-                  paymentHandler("success");
+                  paymentHandler(paymentStatus.SUCCESS);
                 } else if (value.split('/').contains("cancel")) {
                   urlHandler(value);
-                  paymentHandler("cancel");
+                  paymentHandler(paymentStatus.CANCEL);
                 } else if (value.split("/").contains("fail")) {
                   urlHandler(value);
-                  paymentHandler("fail");
+                  paymentHandler(paymentStatus.FAIL);
                 } else {
                   urlHandler(value);
-                  paymentHandler("fail");
+                  paymentHandler(paymentStatus.FAIL);
                 }
               });
             }
@@ -136,10 +139,10 @@ class _AamarpayState<T> extends State<Aamarpay> {
             "desc": widget.description ?? 'Empty',
             "cus_name": widget.customerName ?? 'Customer name',
             "cus_email": widget.customerEmail ?? 'nomail@mail.com',
-            "cus_add1": widget.customerAddress1 ?? 'Dhaka',
-            "cus_add2": widget.customerAddress2 ?? 'Dhaka',
-            "cus_city": widget.customerCity ?? 'Dhaka',
-            "cus_state": widget.customerState ?? "Dhaka",
+            "cus_add1": widget.customerAddress1 ?? 'Address 1',
+            "cus_add2": widget.customerAddress2 ?? 'Address 2',
+            "cus_city": widget.customerCity ?? 'City',
+            "cus_state": widget.customerState ?? "State",
             "cus_postcode": widget.customerPostCode ?? '0',
             "cus_country": "Bangladesh",
             "cus_phone": widget.customerMobile.toString(),
