@@ -1,62 +1,57 @@
-import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class AAWebView extends StatefulWidget {
-  final url;
-
-  AAWebView(this.url);
+  final String url;
+  const AAWebView({Key? key, required this.url}) : super(key: key);
 
   @override
-  _AAWebViewState createState() => _AAWebViewState();
+  State<AAWebView> createState() => _AAWebViewState();
 }
 
 class _AAWebViewState extends State<AAWebView> {
-  final Completer<InAppWebViewController> _completer =
-      Completer<InAppWebViewController>();
-  late bool _isLoadingPage;
-
+  int loadingPercentage = 0;
   @override
   void initState() {
     super.initState();
-    _isLoadingPage = true;
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            InAppWebView(
-                onWebViewCreated: (InAppWebViewController webViewController) {
-                  _completer.complete(webViewController);
-                },
-                onLoadStart: (InAppWebViewController controller, Uri? url) {
-                  setState(() {
-                    _isLoadingPage = true;
-                  });
-                  if (url.toString().split('/').contains("confirm") ||
-                      url.toString().split('/').contains("cancel") ||
-                      url.toString().split('/').contains("fail")) {
-                    Navigator.pop(context, url.toString());
-                  }
-                },
-                onProgressChanged:
-                    (InAppWebViewController controller, int url) {},
-                onLoadStop: (InAppWebViewController controller, Uri? url) {
-                  setState(() {
-                    _isLoadingPage = false;
-                  });
-                },
-                initialUrlRequest: URLRequest(
-                  url: Uri.parse('${widget.url}'),
-                )),
-            _isLoadingPage
-                ? Center(child: CircularProgressIndicator())
-                : Container(),
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            WebView(
+              javascriptMode: JavascriptMode.unrestricted,
+              onPageStarted: (String url) {
+                if (url.split('/').contains("confirm") ||
+                    url.split('/').contains("cancel") ||
+                    url.split('/').contains("fail")) {
+                  Navigator.pop(context, url);
+                }
+              },
+              onProgress: (pos) {
+                setState(() {
+                  loadingPercentage = pos;
+                });
+              },
+              initialUrl: widget.url,
+            ),
+            if (loadingPercentage != 100)
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white24,
+                child: Center(
+                  child: Text(
+                    "$loadingPercentage %",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+              )
           ],
         ),
       ),

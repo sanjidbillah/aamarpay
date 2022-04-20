@@ -6,12 +6,12 @@
 
 ## Requirements 
 
-- Android: `minSdkVersion 17` 
+- Android: `minSdkVersion 19` 
 ## How to use: 
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^0.0.9
+     aamarpay: ^1.0.0
 ```
 install packages from the command line:
 

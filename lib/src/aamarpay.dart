@@ -1,13 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'web_view.dart';
 
-enum eventState { initial, success, error }
+enum EventState { initial, success, error }
 typedef PaymentStatus<T> = void Function(T value);
 typedef IsLoadingStaus<T> = void Function(T value);
 typedef ReadUrl<T> = void Function(T value);
 
-typedef Status<T> = void Function(T value);
+typedef Status<A, B> = void Function(A status, B message);
 
 class Aamarpay extends StatefulWidget {
   final bool isSandBox;
@@ -23,9 +25,10 @@ class Aamarpay extends StatefulWidget {
   final String? customerEmail;
   final String customerMobile;
   final PaymentStatus<String>? paymentStatus;
+
   final IsLoadingStaus<bool>? isLoading;
   final ReadUrl<String>? returnUrl;
-  final Status<eventState>? status;
+  final Status<EventState, String>? status;
   final String? customerAddress1;
   final String? customerAddress2;
   final String? customerCity;
@@ -33,44 +36,45 @@ class Aamarpay extends StatefulWidget {
   final String? customerPostCode;
   final Widget child;
 
-  Aamarpay(
-      {required this.isSandBox,
-      required this.successUrl,
-      required this.failUrl,
-      required this.cancelUrl,
-      required this.storeID,
-      required this.transactionID,
-      required this.transactionAmount,
-      required this.signature,
-      this.description,
-      required this.customerName,
-      required this.customerEmail,
-      required this.customerMobile,
-      this.paymentStatus,
-      this.isLoading,
-      required this.child,
-      this.returnUrl,
-      this.status,
-      this.customerAddress1,
-      this.customerAddress2,
-      this.customerCity,
-      this.customerState,
-      this.customerPostCode});
+  Aamarpay({
+    required this.isSandBox,
+    required this.successUrl,
+    required this.failUrl,
+    required this.cancelUrl,
+    required this.storeID,
+    required this.transactionID,
+    required this.transactionAmount,
+    required this.signature,
+    this.description,
+    required this.customerName,
+    required this.customerEmail,
+    required this.customerMobile,
+    this.paymentStatus,
+    this.isLoading,
+    required this.child,
+    this.returnUrl,
+    this.status,
+    this.customerAddress1,
+    this.customerAddress2,
+    this.customerCity,
+    this.customerState,
+    this.customerPostCode,
+  });
 
   @override
   _AamarpayState createState() => _AamarpayState();
 }
 
 class _AamarpayState<T> extends State<Aamarpay> {
-  void paymentHandler(String value) {
+  void _paymentHandler(String value) {
     widget.paymentStatus?.call(value);
   }
 
-  void loadingHandler(bool value) {
+  void _loadingHandler(bool value) {
     widget.isLoading?.call(value);
   }
 
-  void urlHandler(String value) {
+  void _urlHandler(String value) {
     widget.returnUrl?.call(value);
   }
 
@@ -82,45 +86,45 @@ class _AamarpayState<T> extends State<Aamarpay> {
     return InkWell(
       child: widget.child,
       onTap: () {
-        loadingHandler(true);
+        _loadingHandler(true);
         _getPayment().then((value) {
-          String url = "${widget.isSandBox?_sandBoxUrl:_productionUrl}$value";
+          String url =
+              "${widget.isSandBox ? _sandBoxUrl : _productionUrl}$value";
 
           Future.delayed(Duration(milliseconds: 200), () async {
             Route route =
-                MaterialPageRoute(builder: (context) => AAWebView(url));
+                MaterialPageRoute(builder: (context) => AAWebView(url: url));
             Navigator.push(context, route).then((value) {
               if (value.split('/').contains("confirm")) {
-                urlHandler(value);
-                paymentHandler("success");
+                _paymentHandler("success");
 
-                loadingHandler(false);
+                _loadingHandler(false);
               } else if (value.split('/').contains("cancel")) {
-                urlHandler(value);
-                paymentHandler("cancel");
+                _paymentHandler("cancel");
 
-                loadingHandler(false);
+                _loadingHandler(false);
               } else if (value.split("/").contains("fail")) {
-                urlHandler(value);
-                paymentHandler("fail");
-                loadingHandler(false);
+                _paymentHandler("fail");
+                _loadingHandler(false);
               } else {
-                urlHandler(value);
-                paymentHandler("fail");
-                loadingHandler(false);
+                _paymentHandler("fail");
+                _loadingHandler(false);
               }
+              _urlHandler(value);
             });
           });
+        }).catchError((onError) {
+          widget.status?.call(EventState.error, onError.message);
         });
       },
     );
   }
 
   Future _getPayment() async {
-    try {
-      widget.status?.call(eventState.initial);
-      http.Response response =
-          await http.post(Uri.parse("${widget.isSandBox?_sandBoxUrl:_productionUrl}/index.php"), body: {
+    widget.status?.call(EventState.initial, EventState.initial.name);
+    http.Response response = await http.post(
+      Uri.parse("${widget.isSandBox ? _sandBoxUrl : _productionUrl}/index.php"),
+      body: {
         "store_id": widget.storeID.toString(),
         "tran_id": widget.transactionID.toString(),
         "success_url": widget.successUrl,
@@ -139,8 +143,10 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "cus_postcode": widget.customerPostCode ?? '0',
         "cus_country": "Bangladesh",
         "cus_phone": widget.customerMobile.toString(),
-      });
-      print(response.body);
+      },
+    );
+
+    try {
       if (response.statusCode == 200) {
         String res = response.body;
 
@@ -149,15 +155,27 @@ class _AamarpayState<T> extends State<Aamarpay> {
         final startIndex = res.indexOf(start);
         final endIndex = res.indexOf(end, startIndex + start.length);
         res.substring(startIndex + start.length, endIndex);
-        widget.status?.call(eventState.success);
+        widget.status?.call(EventState.success, EventState.success.name);
         return res.substring(startIndex + start.length, endIndex);
       } else {
-        widget.status?.call(eventState.error);
-        throw Exception();
+        throw Exception(_parseExceptionMessage(response.body));
       }
     } catch (e) {
-      widget.status?.call(eventState.error);
-      throw e;
+      throw Exception(_parseExceptionMessage(response.body));
+    }
+  }
+
+  _parseExceptionMessage(String data) {
+    try {
+      dynamic _res = jsonDecode(data);
+      if (_res.runtimeType.toString() ==
+          "_InternalLinkedHashMap<String, dynamic>") {
+        return _res.values.toList()[0];
+      } else {
+        return _res;
+      }
+    } catch (e) {
+      return 'Unknown please contact with aamarPay';
     }
   }
 }

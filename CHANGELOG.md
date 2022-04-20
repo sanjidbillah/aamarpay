@@ -1,3 +1,10 @@
+## [1.0.0]
+
+* Android native webview
+* Renamed eventState to EventState
+* Added status message
+
+
 ## [0.0.9]
 
 * Null safety
