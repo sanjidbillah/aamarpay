@@ -11,7 +11,7 @@
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^1.0.0
+     aamarpay: ^1.0.1
 ```
 install packages from the command line:
 
@@ -53,12 +53,13 @@ class _MyPayState extends State<MyPay> {
             paymentStatus: (status) {
               print(status);
             },
-           status: (eventState event) {
-              if (event == eventState.error) {
-                setState(() {
-                  isLoading = false;
-                });
-              }
+            status: (EventState event, String message) {
+             if (event == EventState.error) {
+              print(message);
+              setState(() {
+                isLoading = false;
+              });s
+             }
             },
             cancelUrl: "example.com/payment/cancel",
             successUrl: "example.com/payment/confirm",

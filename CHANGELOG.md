@@ -1,3 +1,7 @@
+## [1.0.1]
+
+* Document updated
+
 ## [1.0.0]
 
 * Android native webview
