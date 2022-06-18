@@ -20,15 +20,15 @@ class _MyPayState extends State<MyPay> {
     return Scaffold(
       body: Center(
         child: Aamarpay(
-          returnUrl: (url) {
+          returnUrl: (String url) {
             print(url);
           },
-          isLoading: (v) {
+          isLoading: (bool loading) {
             setState(() {
-              isLoading = v;
+              isLoading = loading;
             });
           },
-          paymentStatus: (status) {
+          paymentStatus: (String status) {
             print(status);
           },
           status: (EventState event, String message) {

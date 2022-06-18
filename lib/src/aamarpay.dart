@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'web_view.dart';
 
 enum EventState { initial, success, error }
+
 typedef PaymentStatus<T> = void Function(T value);
 typedef IsLoadingStaus<T> = void Function(T value);
 typedef ReadUrl<T> = void Function(T value);
@@ -87,10 +88,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
       child: widget.child,
       onTap: () {
         _loadingHandler(true);
-        _getPayment().then((value) {
-          String url =
-              "${widget.isSandBox ? _sandBoxUrl : _productionUrl}$value";
-
+        _getPayment().then((url) {
           Future.delayed(Duration(milliseconds: 200), () async {
             Route route =
                 MaterialPageRoute(builder: (context) => AAWebView(url: url));
@@ -143,20 +141,14 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "cus_postcode": widget.customerPostCode ?? '0',
         "cus_country": "Bangladesh",
         "cus_phone": widget.customerMobile.toString(),
+        "type": "json"
       },
     );
 
     try {
       if (response.statusCode == 200) {
-        String res = response.body;
-
-        String start = 'action="';
-        String end = "\">";
-        final startIndex = res.indexOf(start);
-        final endIndex = res.indexOf(end, startIndex + start.length);
-        res.substring(startIndex + start.length, endIndex);
         widget.status?.call(EventState.success, EventState.success.name);
-        return res.substring(startIndex + start.length, endIndex);
+        return jsonDecode(response.body)['payment_url'];
       } else {
         throw Exception(_parseExceptionMessage(response.body));
       }
