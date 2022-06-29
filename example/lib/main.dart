@@ -30,7 +30,7 @@ class _MyPayState extends State<MyPay> {
               isLoading = loading;
             });
           },
-           // This will return the payment status
+          // This will return the payment status
           paymentStatus: (String status) {
             print(status);
           },
@@ -51,10 +51,10 @@ class _MyPayState extends State<MyPay> {
           customerName: "Masum Billah Sanjid",
           // That is the test signature key. But when you go to the production you must use your own signature key
           signature: "dbb74894e82415a2f7ff0ec3a97e4183",
-           // That is the test storeID. But when you go to the production you must use your own storeID 
+          // That is the test storeID. But when you go to the production you must use your own storeID
           storeID: "aamarpaytest",
           transactionAmount: "100",
-          //The transactionID must be unique for every payment 
+          //The transactionID must be unique for every payment
           transactionID: "transactionID",
           description: "test",
           // When the application goes to the producation the isSandbox must be false
@@ -69,8 +69,7 @@ class _MyPayState extends State<MyPay> {
                   child: Center(
                     child: Text(
                       "Payment",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                 ),

@@ -25,7 +25,7 @@ $ flutter pub get
 - There is a test signature key. But when you go to the production you must use your own signature key 
 - It is better to practice with the example code first
 
-Now in your Dart code, you can use:
+Here is the example code:
 ```
 import 'package:flutter/material.dart';
 import 'package:aamarpay/aamarpay.dart';

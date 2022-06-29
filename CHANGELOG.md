@@ -1,3 +1,7 @@
+## [1.0.3]
+
+* Document updated
+
 ## [1.0.2]
 
 * Fixed producation api
