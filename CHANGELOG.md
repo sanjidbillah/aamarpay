@@ -1,3 +1,7 @@
+## [1.0.4]
+* Fixed eventState
+* Added back button in event as EventState.backButtonPressed
+
 ## [1.0.3]
 
 * Document updated

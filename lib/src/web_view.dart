@@ -4,14 +4,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class AAWebView extends StatefulWidget {
   final String url;
-  const AAWebView({Key? key, required this.url}) : super(key: key);
+  final String successUrl;
+  final String failUrl;
+  final String cancelUrl;
+  const AAWebView(
+      {Key? key, required this.url, required this.successUrl, required this.failUrl, required this.cancelUrl})
+      : super(key: key);
 
   @override
   State<AAWebView> createState() => _AAWebViewState();
 }
 
 class _AAWebViewState extends State<AAWebView> {
-  int loadingPercentage = 0;
+  ValueNotifier<int> loadingPercentage = ValueNotifier(0);
   @override
   void initState() {
     super.initState();
@@ -27,31 +32,33 @@ class _AAWebViewState extends State<AAWebView> {
             WebView(
               javascriptMode: JavascriptMode.unrestricted,
               onPageStarted: (String url) {
-                if (url.split('/').contains("confirm") ||
-                    url.split('/').contains("cancel") ||
-                    url.split('/').contains("fail")) {
+                if (url.contains(widget.successUrl) || url.contains(widget.failUrl) || url.contains(widget.cancelUrl)) {
                   Navigator.pop(context, url);
                 }
               },
               onProgress: (pos) {
-                setState(() {
-                  loadingPercentage = pos;
-                });
+                loadingPercentage.value = pos;
               },
               initialUrl: widget.url,
             ),
-            if (loadingPercentage != 100)
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white24,
-                child: Center(
-                  child: Text(
-                    "$loadingPercentage %",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ),
-              )
+            ValueListenableBuilder(
+                valueListenable: loadingPercentage,
+                builder: (_, percentage, __) {
+                  if (percentage == 100) {
+                    return SizedBox.shrink();
+                  }
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white24,
+                    child: Center(
+                      child: Text(
+                        "$percentage %",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  );
+                })
           ],
         ),
       ),

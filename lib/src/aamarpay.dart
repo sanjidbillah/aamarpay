@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'web_view.dart';
 
-enum EventState { initial, success, error }
+enum EventState { success, fail, cancel, error, backButtonPressed }
 
 typedef PaymentStatus<T> = void Function(T value);
 typedef IsLoadingStaus<T> = void Function(T value);
@@ -26,7 +26,6 @@ class Aamarpay extends StatefulWidget {
   final String? customerEmail;
   final String customerMobile;
   final PaymentStatus<String>? paymentStatus;
-
   final IsLoadingStaus<bool>? isLoading;
   final ReadUrl<String>? returnUrl;
   final Status<EventState, String>? status;
@@ -50,7 +49,7 @@ class Aamarpay extends StatefulWidget {
     required this.customerName,
     required this.customerEmail,
     required this.customerMobile,
-    this.paymentStatus,
+    @Deprecated('Use status function insted of paymentStatus') this.paymentStatus,
     this.isLoading,
     required this.child,
     this.returnUrl,
@@ -75,8 +74,11 @@ class _AamarpayState<T> extends State<Aamarpay> {
     widget.isLoading?.call(value);
   }
 
-  void _urlHandler(String value) {
-    widget.returnUrl?.call(value);
+  void _urlHandler(String? value) {
+    widget.returnUrl?.call(value ?? "No url was found because user pressed back button");
+    if (value == null) {
+      widget.status?.call(EventState.backButtonPressed, 'User pressed back button');
+    }
   }
 
   String _sandBoxUrl = 'https://sandbox.aamarpay.com';
@@ -89,29 +91,37 @@ class _AamarpayState<T> extends State<Aamarpay> {
       onTap: () {
         _loadingHandler(true);
         _getPayment().then((url) {
-          Future.delayed(Duration(milliseconds: 200), () async {
-            Route route =
-                MaterialPageRoute(builder: (context) => AAWebView(url: url));
+          if (url == null) {
+            _loadingHandler(false);
+            widget.status?.call(EventState.error, 'error');
+          } else {
+            Route route = MaterialPageRoute(
+                builder: (context) => AAWebView(
+                      url: url,
+                      successUrl: widget.successUrl,
+                      failUrl: widget.failUrl,
+                      cancelUrl: widget.cancelUrl,
+                    ));
             Navigator.push(context, route).then((value) {
-              if (value.split('/').contains("confirm")) {
+              if (value.toString().contains(widget.successUrl)) {
                 _paymentHandler("success");
-
-                _loadingHandler(false);
-              } else if (value.split('/').contains("cancel")) {
+                widget.status?.call(EventState.success, 'Payment has been succeeded');
+              } else if (value.toString().contains(widget.cancelUrl)) {
                 _paymentHandler("cancel");
-
-                _loadingHandler(false);
-              } else if (value.split("/").contains("fail")) {
+                widget.status?.call(EventState.cancel, 'Payment has been canceled');
+              } else if (value.toString().contains(widget.failUrl)) {
                 _paymentHandler("fail");
-                _loadingHandler(false);
+                widget.status?.call(EventState.fail, 'Payment has been failed');
               } else {
                 _paymentHandler("fail");
-                _loadingHandler(false);
+                widget.status?.call(EventState.fail, 'Payment has been failed');
               }
+              _loadingHandler(false);
               _urlHandler(value);
             });
-          });
+          }
         }).catchError((onError) {
+          _loadingHandler(false);
           widget.status?.call(EventState.error, onError.message);
         });
       },
@@ -119,7 +129,6 @@ class _AamarpayState<T> extends State<Aamarpay> {
   }
 
   Future _getPayment() async {
-    widget.status?.call(EventState.initial, EventState.initial.name);
     http.Response response = await http.post(
       Uri.parse("${widget.isSandBox ? _sandBoxUrl : _productionUrl}/index.php"),
       body: {
@@ -144,10 +153,9 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "type": "json"
       },
     );
-
+    print(response.body);
     try {
       if (response.statusCode == 200) {
-        widget.status?.call(EventState.success, EventState.success.name);
         return jsonDecode(response.body)['payment_url'];
       } else {
         throw Exception(_parseExceptionMessage(response.body));
@@ -160,8 +168,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
   _parseExceptionMessage(String data) {
     try {
       dynamic _res = jsonDecode(data);
-      if (_res.runtimeType.toString() ==
-          "_InternalLinkedHashMap<String, dynamic>") {
+      if (_res.runtimeType.toString() == "_InternalLinkedHashMap<String, dynamic>") {
         return _res.values.toList()[0];
       } else {
         return _res;

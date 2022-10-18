@@ -30,19 +30,11 @@ class _MyPayState extends State<MyPay> {
               isLoading = loading;
             });
           },
-          // This will return the payment status
-          paymentStatus: (String status) {
-            print(status);
-          },
-          // This will return the payment event with a message
+          // This will return the payment state with a message
           status: (EventState event, String message) {
-            if (event == EventState.error) {
-              setState(() {
-                isLoading = false;
-              });
-            }
+            print(event);
+            if (event == EventState.success) {}
           },
-          // When you use your own url, you must have the keywords:cancel,confirm,fail otherwise the callback function will not work properly
           cancelUrl: "example.com/payment/cancel",
           successUrl: "example.com/payment/confirm",
           failUrl: "example.com/payment/fail",
@@ -53,9 +45,9 @@ class _MyPayState extends State<MyPay> {
           signature: "dbb74894e82415a2f7ff0ec3a97e4183",
           // That is the test storeID. But when you go to the production you must use your own storeID
           storeID: "aamarpaytest",
-          transactionAmount: "100",
+          transactionAmount: "200",
           //The transactionID must be unique for every payment
-          transactionID: "transactionID",
+          transactionID: "${DateTime.now().millisecondsSinceEpoch}",
           description: "test",
           // When the application goes to the producation the isSandbox must be false
           isSandBox: true,
