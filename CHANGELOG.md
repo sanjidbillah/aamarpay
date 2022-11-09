@@ -1,3 +1,6 @@
+## [1.0.5]
+* Added `transactionAmountFromTextField` properties for `TextEditingController`
+
 ## [1.0.4]
 * Fixed eventState
 * Added back button in event as EventState.backButtonPressed

@@ -8,7 +8,11 @@ class AAWebView extends StatefulWidget {
   final String failUrl;
   final String cancelUrl;
   const AAWebView(
-      {Key? key, required this.url, required this.successUrl, required this.failUrl, required this.cancelUrl})
+      {Key? key,
+      required this.url,
+      required this.successUrl,
+      required this.failUrl,
+      required this.cancelUrl})
       : super(key: key);
 
   @override
@@ -32,7 +36,9 @@ class _AAWebViewState extends State<AAWebView> {
             WebView(
               javascriptMode: JavascriptMode.unrestricted,
               onPageStarted: (String url) {
-                if (url.contains(widget.successUrl) || url.contains(widget.failUrl) || url.contains(widget.cancelUrl)) {
+                if (url.contains(widget.successUrl) ||
+                    url.contains(widget.failUrl) ||
+                    url.contains(widget.cancelUrl)) {
                   Navigator.pop(context, url);
                 }
               },
@@ -54,7 +60,8 @@ class _AAWebViewState extends State<AAWebView> {
                     child: Center(
                       child: Text(
                         "$percentage %",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   );

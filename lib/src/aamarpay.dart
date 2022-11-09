@@ -51,7 +51,8 @@ class Aamarpay extends StatefulWidget {
     required this.customerName,
     required this.customerEmail,
     required this.customerMobile,
-    @Deprecated('Use status function insted of paymentStatus') this.paymentStatus,
+    @Deprecated('Use status function insted of paymentStatus')
+        this.paymentStatus,
     this.isLoading,
     required this.child,
     this.returnUrl,
@@ -61,7 +62,8 @@ class Aamarpay extends StatefulWidget {
     this.customerCity,
     this.customerState,
     this.customerPostCode,
-  }) : assert((transactionAmount != null || transactionAmountFromTextField != null)
+  }) : assert((transactionAmount != null ||
+                transactionAmountFromTextField != null)
             ? true
             : throw "Add transactionAmount Or transactionAmountFromTextField");
 
@@ -79,9 +81,11 @@ class _AamarpayState<T> extends State<Aamarpay> {
   }
 
   void _urlHandler(String? value) {
-    widget.returnUrl?.call(value ?? "No url was found because user pressed back button");
+    widget.returnUrl
+        ?.call(value ?? "No url was found because user pressed back button");
     if (value == null) {
-      widget.status?.call(EventState.backButtonPressed, 'User pressed back button');
+      widget.status
+          ?.call(EventState.backButtonPressed, 'User pressed back button');
     }
   }
 
@@ -109,10 +113,12 @@ class _AamarpayState<T> extends State<Aamarpay> {
             Navigator.push(context, route).then((value) {
               if (value.toString().contains(widget.successUrl)) {
                 _paymentHandler("success");
-                widget.status?.call(EventState.success, 'Payment has been succeeded');
+                widget.status
+                    ?.call(EventState.success, 'Payment has been succeeded');
               } else if (value.toString().contains(widget.cancelUrl)) {
                 _paymentHandler("cancel");
-                widget.status?.call(EventState.cancel, 'Payment has been canceled');
+                widget.status
+                    ?.call(EventState.cancel, 'Payment has been canceled');
               } else if (value.toString().contains(widget.failUrl)) {
                 _paymentHandler("fail");
                 widget.status?.call(EventState.fail, 'Payment has been failed');
@@ -141,7 +147,9 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "success_url": widget.successUrl,
         "fail_url": widget.failUrl,
         "cancel_url": widget.cancelUrl,
-        "amount": widget.transactionAmount ?? widget.transactionAmountFromTextField?.text ?? 0,
+        "amount": widget.transactionAmount ??
+            widget.transactionAmountFromTextField?.text ??
+            0,
         "currency": "BDT",
         "signature_key": widget.signature,
         "desc": widget.description ?? 'Empty',
@@ -172,7 +180,8 @@ class _AamarpayState<T> extends State<Aamarpay> {
   _parseExceptionMessage(String data) {
     try {
       dynamic _res = jsonDecode(data);
-      if (_res.runtimeType.toString() == "_InternalLinkedHashMap<String, dynamic>") {
+      if (_res.runtimeType.toString() ==
+          "_InternalLinkedHashMap<String, dynamic>") {
         return _res.values.toList()[0];
       } else {
         return _res;
