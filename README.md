@@ -21,7 +21,6 @@ $ flutter pub get
 ## Importance notes
 - Read the comments in the example code
 - The transactionID must be unique for every payment 
-- When you use your own url in cancelUrl,successUrl and failUrl, you must have the keywords:cancel,confirm,fail otherwise the callback function will not work
 - There is a test signature key. But when you go to the production you must use your own signature key 
 - It is better to practice with the example code first
 
@@ -59,10 +58,6 @@ class _MyPayState extends State<MyPay> {
               isLoading = loading;
             });
           },
-           // This will return the payment status
-          paymentStatus: (String status) {
-            print(status);
-          },
           // This will return the payment event with a message
           status: (EventState event, String message) {
             if (event == EventState.error) {
@@ -81,8 +76,12 @@ class _MyPayState extends State<MyPay> {
           // That is the test signature key. But when you go to the production you must use your own signature key
           signature: "dbb74894e82415a2f7ff0ec3a97e4183",
            // That is the test storeID. But when you go to the production you must use your own storeID 
-          storeID: "aamarpaytest",
-          transactionAmount: "100",
+          storeID: "aamarpaytest", 
+          // Use transactionAmountFromTextField when you pass amount with TextEditingController
+          // transactionAmountFromTextField: amountTextEditingController,
+          transactionAmount: "200",
+          //The transactionID must be unique for every payment
+          transactionID: "${DateTime.now().millisecondsSinceEpoch}",
           //The transactionID must be unique for every payment 
           transactionID: "transactionID",
           description: "test",

@@ -19,7 +19,8 @@ class Aamarpay extends StatefulWidget {
   final String cancelUrl;
   final String storeID;
   final String transactionID;
-  final String transactionAmount;
+  final String? transactionAmount;
+  final TextEditingController? transactionAmountFromTextField;
   final String signature;
   final String? description;
   final String? customerName;
@@ -43,7 +44,8 @@ class Aamarpay extends StatefulWidget {
     required this.cancelUrl,
     required this.storeID,
     required this.transactionID,
-    required this.transactionAmount,
+    this.transactionAmount,
+    this.transactionAmountFromTextField,
     required this.signature,
     this.description,
     required this.customerName,
@@ -59,7 +61,9 @@ class Aamarpay extends StatefulWidget {
     this.customerCity,
     this.customerState,
     this.customerPostCode,
-  });
+  }) : assert((transactionAmount != null || transactionAmountFromTextField != null)
+            ? true
+            : throw "Add transactionAmount Or transactionAmountFromTextField");
 
   @override
   _AamarpayState createState() => _AamarpayState();
@@ -132,12 +136,12 @@ class _AamarpayState<T> extends State<Aamarpay> {
     http.Response response = await http.post(
       Uri.parse("${widget.isSandBox ? _sandBoxUrl : _productionUrl}/index.php"),
       body: {
-        "store_id": widget.storeID.toString(),
-        "tran_id": widget.transactionID.toString(),
+        "store_id": widget.storeID,
+        "tran_id": widget.transactionID,
         "success_url": widget.successUrl,
         "fail_url": widget.failUrl,
         "cancel_url": widget.cancelUrl,
-        "amount": widget.transactionAmount.toString(),
+        "amount": widget.transactionAmount ?? widget.transactionAmountFromTextField?.text ?? 0,
         "currency": "BDT",
         "signature_key": widget.signature,
         "desc": widget.description ?? 'Empty',
@@ -149,7 +153,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "cus_state": widget.customerState ?? "Dhaka",
         "cus_postcode": widget.customerPostCode ?? '0',
         "cus_country": "Bangladesh",
-        "cus_phone": widget.customerMobile.toString(),
+        "cus_phone": widget.customerMobile,
         "type": "json"
       },
     );

@@ -45,6 +45,8 @@ class _MyPayState extends State<MyPay> {
           signature: "dbb74894e82415a2f7ff0ec3a97e4183",
           // That is the test storeID. But when you go to the production you must use your own storeID
           storeID: "aamarpaytest",
+          // Use transactionAmountFromTextField when you pass amount with TextEditingController
+          // transactionAmountFromTextField: amountTextEditingController,
           transactionAmount: "200",
           //The transactionID must be unique for every payment
           transactionID: "${DateTime.now().millisecondsSinceEpoch}",
