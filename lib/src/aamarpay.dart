@@ -35,6 +35,10 @@ class Aamarpay extends StatefulWidget {
   final String? customerCity;
   final String? customerState;
   final String? customerPostCode;
+  final String? optA;
+  final String? optB;
+  final String? optC;
+  final String? optD;
   final Widget child;
 
   Aamarpay({
@@ -62,6 +66,10 @@ class Aamarpay extends StatefulWidget {
     this.customerCity,
     this.customerState,
     this.customerPostCode,
+    this.optA,
+    this.optB,
+    this.optC,
+    this.optD,
   }) : assert((transactionAmount != null ||
                 transactionAmountFromTextField != null)
             ? true
@@ -162,6 +170,10 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "cus_postcode": widget.customerPostCode ?? '0',
         "cus_country": "Bangladesh",
         "cus_phone": widget.customerMobile,
+        "opt_a": widget.optA ?? "",
+        "opt_b": widget.optB ?? "",
+        "opt_c": widget.optC ?? "",
+        "opt_d": widget.optD ?? "",
         "type": "json"
       },
     );

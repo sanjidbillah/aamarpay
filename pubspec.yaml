@@ -1,6 +1,6 @@
 name: aamarpay
-description: Official Flutter plugin for aamarPay. aamarPay is an online payment gateway service for Bangladesh.
-version: 1.0.5
+description: Official Flutter package for aamarPay. aamarPay is an online payment gateway service for Bangladesh.
+version: 1.0.6
 homepage: https://github.com/sanjidbillah/aamarpay
 
 environment:

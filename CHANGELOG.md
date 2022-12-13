@@ -1,3 +1,7 @@
+## [1.0.6]
+* Optional field added
+
+
 ## [1.0.5]
 * Added `transactionAmountFromTextField` properties for `TextEditingController`
 
