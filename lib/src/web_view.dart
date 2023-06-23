@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -20,11 +19,34 @@ class AAWebView extends StatefulWidget {
 }
 
 class _AAWebViewState extends State<AAWebView> {
+  late final WebViewController _controller;
+
   ValueNotifier<int> loadingPercentage = ValueNotifier(0);
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            loadingPercentage.value = progress;
+          },
+          onPageStarted: (String url) {
+            if (url.contains(widget.successUrl) ||
+                url.contains(widget.failUrl) ||
+                url.contains(widget.cancelUrl)) {
+              Navigator.pop(context, url);
+            }
+          },
+        ),
+      )
+      ..loadRequest(
+        Uri.parse(
+          widget.url,
+        ),
+      );
   }
 
   @override
@@ -33,19 +55,8 @@ class _AAWebViewState extends State<AAWebView> {
       body: SafeArea(
         child: Stack(
           children: [
-            WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageStarted: (String url) {
-                if (url.contains(widget.successUrl) ||
-                    url.contains(widget.failUrl) ||
-                    url.contains(widget.cancelUrl)) {
-                  Navigator.pop(context, url);
-                }
-              },
-              onProgress: (pos) {
-                loadingPercentage.value = pos;
-              },
-              initialUrl: widget.url,
+            WebViewWidget(
+              controller: _controller,
             ),
             ValueListenableBuilder(
                 valueListenable: loadingPercentage,
