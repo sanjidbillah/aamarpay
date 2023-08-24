@@ -11,7 +11,7 @@
 In the `dependencies`: section of your `pubspec.yaml`, add the following line:
 ```
 dependencies:
-     aamarpay: ^1.0.6
+     aamarpay: ^1.0.7
 ```
 install packages from the command line:
 

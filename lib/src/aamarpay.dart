@@ -56,7 +56,7 @@ class Aamarpay extends StatefulWidget {
     required this.customerEmail,
     required this.customerMobile,
     @Deprecated('Use status function insted of paymentStatus')
-        this.paymentStatus,
+    this.paymentStatus,
     this.isLoading,
     required this.child,
     this.returnUrl,

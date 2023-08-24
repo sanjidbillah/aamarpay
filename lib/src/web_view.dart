@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -7,13 +6,13 @@ class AAWebView extends StatefulWidget {
   final String successUrl;
   final String failUrl;
   final String cancelUrl;
-  const AAWebView(
-      {Key? key,
-      required this.url,
-      required this.successUrl,
-      required this.failUrl,
-      required this.cancelUrl})
-      : super(key: key);
+  const AAWebView({
+    Key? key,
+    required this.url,
+    required this.successUrl,
+    required this.failUrl,
+    required this.cancelUrl,
+  }) : super(key: key);
 
   @override
   State<AAWebView> createState() => _AAWebViewState();
@@ -21,51 +20,51 @@ class AAWebView extends StatefulWidget {
 
 class _AAWebViewState extends State<AAWebView> {
   ValueNotifier<int> loadingPercentage = ValueNotifier(0);
-  @override
-  void initState() {
-    super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-  }
+  late WebViewController controller = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setBackgroundColor(const Color(0x00000000))
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onProgress: (int progress) {
+          loadingPercentage.value = progress;
+        },
+        onPageStarted: (String url) {
+          if (url.contains(widget.successUrl) ||
+              url.contains(widget.failUrl) ||
+              url.contains(widget.cancelUrl)) {
+            Navigator.pop(context, url);
+          }
+        },
+        onPageFinished: (String url) {},
+        onWebResourceError: (WebResourceError error) {},
+      ),
+    )
+    ..loadRequest(Uri.parse(widget.url));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageStarted: (String url) {
-                if (url.contains(widget.successUrl) ||
-                    url.contains(widget.failUrl) ||
-                    url.contains(widget.cancelUrl)) {
-                  Navigator.pop(context, url);
-                }
-              },
-              onProgress: (pos) {
-                loadingPercentage.value = pos;
-              },
-              initialUrl: widget.url,
-            ),
             ValueListenableBuilder(
                 valueListenable: loadingPercentage,
                 builder: (_, percentage, __) {
-                  if (percentage == 100) {
-                    return SizedBox.shrink();
+                  if (percentage != 100) {
+                    return LinearProgressIndicator(
+                      value: percentage / 100,
+                      backgroundColor: Colors.grey[100],
+                      color: Colors.blueAccent,
+                    );
                   }
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white24,
-                    child: Center(
-                      child: Text(
-                        "$percentage %",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                  );
-                })
+
+                  return SizedBox.shrink();
+                }),
+            Expanded(
+              child: WebViewWidget(
+                controller: controller,
+              ),
+            ),
           ],
         ),
       ),

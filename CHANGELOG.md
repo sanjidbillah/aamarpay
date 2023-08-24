@@ -1,3 +1,7 @@
+## [1.0.7]
+* Upgrade dependency
+
+
 ## [1.0.6]
 * Optional field added
 
