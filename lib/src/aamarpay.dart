@@ -148,8 +148,10 @@ class _AamarpayState<T> extends State<Aamarpay> {
 
   Future _getPayment() async {
     http.Response response = await http.post(
-      Uri.parse("${widget.isSandBox ? _sandBoxUrl : _productionUrl}/index.php"),
-      body: {
+      widget.isSandBox
+          ? Uri.parse("${_sandBoxUrl}/jsonpost.php")
+          : Uri.parse("${_productionUrl}/jsonpost.php"),
+      body: json.encode({
         "store_id": widget.storeID,
         "tran_id": widget.transactionID,
         "success_url": widget.successUrl,
@@ -175,7 +177,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "opt_c": widget.optC ?? "",
         "opt_d": widget.optD ?? "",
         "type": "json"
-      },
+      }),
     );
     print(response.body);
     try {

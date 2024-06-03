@@ -1,3 +1,12 @@
+## [1.0.9]
+* Removed production env
+
+
+## [1.0.8]
+* Fix production env
+
+
+
 ## [1.0.7]
 * Upgrade dependency
 
