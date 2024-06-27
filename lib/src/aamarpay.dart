@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'web_view.dart';
 
 enum EventState { success, fail, cancel, error, backButtonPressed }
@@ -147,11 +147,11 @@ class _AamarpayState<T> extends State<Aamarpay> {
   }
 
   Future _getPayment() async {
-    http.Response response = await http.post(
+    Response response = await Dio().post(
       widget.isSandBox
-          ? Uri.parse("${_sandBoxUrl}/jsonpost.php")
-          : Uri.parse("${_productionUrl}/jsonpost.php"),
-      body: json.encode({
+          ? "${_sandBoxUrl}/jsonpost.php"
+          : "${_productionUrl}/jsonpost.php",
+      data: json.encode({
         "store_id": widget.storeID,
         "tran_id": widget.transactionID,
         "success_url": widget.successUrl,
@@ -179,15 +179,15 @@ class _AamarpayState<T> extends State<Aamarpay> {
         "type": "json"
       }),
     );
-    print(response.body);
+
     try {
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['payment_url'];
+        return jsonDecode(response.data)['payment_url'];
       } else {
-        throw Exception(_parseExceptionMessage(response.body));
+        throw Exception(_parseExceptionMessage(response.data));
       }
     } catch (e) {
-      throw Exception(_parseExceptionMessage(response.body));
+      throw Exception(_parseExceptionMessage(response.data));
     }
   }
 

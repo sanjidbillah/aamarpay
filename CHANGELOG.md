@@ -1,3 +1,7 @@
+## [1.0.10]
+* Changed the HTTP package to Dio.
+
+
 ## [1.0.9]
 * Removed production env
 

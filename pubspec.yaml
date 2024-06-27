@@ -1,6 +1,6 @@
 name: aamarpay
 description: Official Flutter package for aamarPay. aamarPay is an online payment gateway service for Bangladesh.
-version: 1.0.9
+version: 1.0.10
 homepage: https://github.com/sanjidbillah/aamarpay
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   webview_flutter: ^4.8.0
-  http: ^1.2.1
+  dio: ^5.4.3+1
 
 dev_dependencies:
   flutter_test:
