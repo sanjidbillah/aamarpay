@@ -1,3 +1,6 @@
+## [1.0.12]
+* Rollback to old version
+
 ## [1.0.10]
 * Changed the HTTP package to Dio.
 
