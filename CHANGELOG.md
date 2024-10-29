@@ -1,3 +1,6 @@
+## [1.0.13]
+* Fix decode issue
+
 ## [1.0.12]
 * Rollback to old version
 

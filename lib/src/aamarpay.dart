@@ -182,7 +182,7 @@ class _AamarpayState<T> extends State<Aamarpay> {
 
     try {
       if (response.statusCode == 200) {
-        return jsonDecode(response.data)['payment_url'];
+        return response.data['payment_url'];
       } else {
         throw Exception(_parseExceptionMessage(response.data));
       }
