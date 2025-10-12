@@ -1,18 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:aamarpay/aamarpay.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: MyPay(),
-  ));
+  runApp(MaterialApp(home: MyPay()));
 }
 
 class MyPay extends StatefulWidget {
+  const MyPay({super.key});
+
   @override
-  _MyPayState createState() => _MyPayState();
+  MyPayState createState() => MyPayState();
 }
 
-class _MyPayState extends State<MyPay> {
+class MyPayState extends State<MyPay> {
   bool isLoading = false;
 
   @override
@@ -22,7 +24,9 @@ class _MyPayState extends State<MyPay> {
         child: Aamarpay(
           // This will return a payment url based on failUrl,cancelUrl,successUrl
           returnUrl: (String url) {
-            print(url);
+            if (kDebugMode) {
+              print(url);
+            }
           },
           // This will return the payment loading status
           isLoading: (bool loading) {
@@ -32,7 +36,9 @@ class _MyPayState extends State<MyPay> {
           },
           // This will return the payment state with a message
           status: (EventState event, String message) {
-            print(event);
+            if (kDebugMode) {
+              print(event);
+            }
             if (event == EventState.success) {}
           },
           cancelUrl: "example.com/payment/cancel",
@@ -42,9 +48,9 @@ class _MyPayState extends State<MyPay> {
           customerMobile: "01834760591",
           customerName: "Masum Billah Sanjid",
           // That is the test signature key. But when you go to the production you must use your own signature key
-          signature: "dbb74894e82415a2f7ff0ec3a97e4183",
+          signature: "37da1e291ac2612ee91cd9736e4ce4f5",
           // That is the test storeID. But when you go to the production you must use your own storeID
-          storeID: "aamarpaytest",
+          storeID: "subeasy",
           // Use transactionAmountFromTextField when you pass amount with TextEditingController
           // transactionAmountFromTextField: amountTextEditingController,
           transactionAmount: "200",
@@ -52,11 +58,9 @@ class _MyPayState extends State<MyPay> {
           transactionID: "${DateTime.now().millisecondsSinceEpoch}",
           description: "test",
           // When the application goes to the producation the isSandbox must be false
-          isSandBox: true,
+          isSandBox: false,
           child: isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? Center(child: CircularProgressIndicator())
               : Container(
                   color: Colors.orange,
                   height: 50,
@@ -64,7 +68,9 @@ class _MyPayState extends State<MyPay> {
                     child: Text(
                       "Payment",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

@@ -1,3 +1,6 @@
+## [1.0.14]
+* Upgrade dependency
+
 ## [1.0.13]
 * Fix decode issue
 
